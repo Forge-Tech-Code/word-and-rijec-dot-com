@@ -31,11 +31,12 @@ There is no test suite, no linter and no typechecker. `npm run build` is the onl
 build rather than appearing in the browser. The same-shape check on the two dictionaries rides on that:
 see "Two languages".
 
-Two optional Python helpers, neither wired into the build:
+Three optional Python helpers, none wired into the build:
 
 ```bash
 pip install cairosvg Pillow && python3 scripts/build-icons.py   # PNG icons from public/favicon.svg
 pip install fonttools brotli && python3 scripts/trim-fonts.py   # narrow the fonts' weight axes in place
+python3 marketing/social/build.py                               # social-media posters; see "Social posters"
 ```
 
 ## Stack
@@ -73,6 +74,7 @@ src/
   sections/             one file per section, in page order
 public/                 copied verbatim into dist/ — fonts, favicon, robots, sitemap, 404, manifest
 scripts/                Python one-offs, run by hand
+marketing/social/       social-media posters: build.py, and the PNGs it renders. NOT deployed
 .github/workflows/      deploy.yml — build and publish to GitHub Pages on push to main
 ```
 
@@ -233,7 +235,7 @@ addition: if it is not the water, the stone, the trees or the flower, it does no
 | --- | --- | --- |
 | `mint` | `#B8D6B2` | the meadow. Mint green — the page's signature colour |
 | `haze` | `#A7B0AA` | sun-bleached limestone. The grey band |
-| `pine` | `#24463C` | the trees. The footer, and heading and label type on the light bands |
+| `pine` | `#24463C` | the trees. Heading and label type on the light bands, and the logo's bubble. Never a background |
 | `pine-light` | `#33594D` | dark `<Photo>` placeholders only; nothing uses it now |
 | `cloud` | `#F4F5F1` | cards, the navbar pill, ghost buttons, and the text colour on `pine`. **Never a section background.** |
 | `dandelion` | `#EDD382` | the immortelle bloom. A pastel yellow; the primary button — a ground for `ink` type (9.7:1) |
@@ -441,9 +443,9 @@ the second one on their own. The `onPageRendered` hook in `vite.config.js` and `
 you ever add a page deeper than one directory, they already handle it — they count segments rather than
 special-casing `hr`.
 
-### The origin is hard-coded in four places
+### The origin is hard-coded in five places
 
-These are static files that cannot import from `siteInfo.js`, so a domain change means editing all of them
+These are files that cannot import from `siteInfo.js`, so a domain change means editing all of them
 together:
 
 1. `src/siteInfo.js` → `site.url`
@@ -452,12 +454,22 @@ together:
    and Croatian). These have to be absolute: GitHub Pages serves this file for unknown paths at *any*
    depth, where a relative path breaks
 4. `public/CNAME` → the bare domain, no scheme, no trailing slash
+5. `marketing/social/build.py` → `URL` (and `EMAIL`, which also duplicates `site.email`). The posters are
+   PNGs with the domain **drawn into the pixels**, so after changing it, rerun the script and replace any
+   poster already posted — an old image keeps advertising the old address
 
 `index.html` used to be on this list and no longer is: the canonical, `og:url`, the hreflang set and the
 JSON-LD `@id`s are all derived from `site.url` by `src/components/Seo.jsx`. That is one fewer place to
 forget — don't type the origin back into the template.
 
-`grep -rn "word-and-rijec" --exclude-dir=node_modules --exclude-dir=dist .` finds the lot.
+Two more carry the domain as text rather than as a working URL, and need the same edit:
+
+- `public/robots.txt` → the commented-out `Sitemap:` line, which becomes live at launch (see SEO)
+- `contact.form.subject` in **both** dictionaries → the subject line of every enquiry email
+
+`grep -rn "word-and-rijec" --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=html .` finds the lot
+(`marketing/social/html/` is the script's generated intermediate output, and git-ignored). The other hits are
+code comments, `README.md`, and the npm package name, none of which affect the site.
 
 ### DNS, one time
 
@@ -521,6 +533,40 @@ that ships real copy, not before.
 The `robots` tag is in `index.html` rather than `Seo.jsx` on purpose: it applies to both languages, so the
 launch switch stays one edit rather than two. "Real copy" means real copy **in both languages**, and no
 invented testimonials in either.
+
+## Social posters
+
+`marketing/social/build.py` renders Facebook/Instagram posters in the site's own system — the palette, the
+three faces from `public/fonts/`, `<Logo>`, `<Sprig>`, the service icons and two of the `<Divider>` seams,
+all copied into the script. Each design is written as HTML to `marketing/social/html/` (git-ignored) and
+screenshotted to `marketing/social/png/<n>-<design>-<en|hr>.png` at 2x: 2160×2700 for the 4:5 feed posts,
+2160×2160 for the squares.
+
+| design | size | contents |
+| --- | --- | --- |
+| `1-tagline` | 4:5 | wordmark, tagline, first hero paragraph, `hero.offer`, "Get in touch" button, URL and email |
+| `2-services` | 4:5 | the four service cards (icon, title, audience) |
+| `3-about` | 4:5 | the portrait, her name, two sentences from About |
+| `4-how-it-works` | square | the three steps, shortened by dropping whole sentences |
+| `5-rates` | square | the rate card and the "first call is free" note |
+| `6-name` | 4:5 | large logo and wordmark, tagline, `site.what`, URL and email. The portrait was tried here and dropped as too much |
+
+The site owner picked **1, 2, 4 and 6** for use. 3 and 5 still render but were not chosen.
+
+- **Rendered with headless Firefox**, the only browser that works here: Vivaldi's `--headless` hangs.
+  The script keeps a throwaway profile in `marketing/social/.ffprofile/` (git-ignored). The 2x comes from
+  `zoom: 2` on `<html>` with a doubled window; the `layout.css.devPixelsPerPx` pref is ignored by
+  `--screenshot`.
+- **The copy is duplicated, not imported** — it lives in the `T` dict in the script, copied verbatim from
+  the dictionaries and `Rates.jsx`. When she changes copy or a price on the site, update `T` and rerun, or
+  the posters go stale.
+- **The same content rules apply.** Nothing in `T` may be written on her behalf. The invented testimonials
+  and the placeholder `site.location` are deliberately not used; keep it that way. The Croatian
+  `services.sub` is scaffold chrome, so the HR Services poster shows her tagline there instead.
+- **Unconfirmed:** the Croatian `site.what` ("Jezične usluge na engleskom i hrvatskom") on `6-name-hr` has
+  not been confirmed as hers; she should check it before it is posted.
+- **The posters point people at the live site**, which still carries the invented testimonials — see below.
+  Advertising drives traffic regardless of `noindex`.
 
 ## What's placeholder
 
