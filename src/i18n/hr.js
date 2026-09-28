@@ -116,9 +116,6 @@ export default {
     ],
   },
 
-  // PLACEHOLDER, translated from the invented English quotes in en.js at the
-  // site owner's request. Not from real students — replace or remove both
-  // languages together before launch. See CLAUDE.md → "What's placeholder".
   testimonials: {
     heading: 'Preporuke',
     sub: 'Njihovim riječima',

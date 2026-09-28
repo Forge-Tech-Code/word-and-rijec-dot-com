@@ -4,9 +4,8 @@
      itself, which is why both <url> blocks carry the same three <xhtml:link>
      entries; they mirror what src/components/Seo.jsx puts in each page's head.
 
-     Nothing is crawling this yet: robots.txt is Disallow-all and index.html is
-     noindex until real copy ships. Bump both <lastmod> values then, and
-     uncomment the Sitemap line in robots.txt. -->
+     robots.txt points crawlers here. Bump both <lastmod> values whenever the
+     page content changes. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
@@ -14,7 +13,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://word-and-rijec.com/" />
     <xhtml:link rel="alternate" hreflang="hr" href="https://word-and-rijec.com/hr/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://word-and-rijec.com/" />
-    <lastmod>2026-09-14</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -23,7 +22,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://word-and-rijec.com/" />
     <xhtml:link rel="alternate" hreflang="hr" href="https://word-and-rijec.com/hr/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://word-and-rijec.com/" />
-    <lastmod>2026-09-14</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>

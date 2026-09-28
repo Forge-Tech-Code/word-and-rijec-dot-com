@@ -14,17 +14,6 @@
          The `lang` attribute above is the English default; Seo.jsx overwrites
          it per locale, so the Croatian page ships lang="hr". -->
 
-    <!-- NOINDEX UNTIL LAUNCH. The domain is live, but the testimonials are
-         still invented — letting Google index them now means the real site
-         launches on top of an indexed placeholder, on the real domain, which
-         is worse than the github.io case this tag was first written for.
-         Delete this tag and the Disallow in public/robots.txt in the same
-         commit that removes the last placeholder — see CLAUDE.md → SEO.
-
-         It is here rather than in Seo.jsx deliberately: it applies to both
-         languages, and the launch switch should be one edit, not two. -->
-    <meta name="robots" content="noindex, nofollow" />
-
     <meta name="theme-color" content="#B8D6B2" />
 
     <!-- Icons. favicon.svg is the master; run scripts/build-icons.py to derive
