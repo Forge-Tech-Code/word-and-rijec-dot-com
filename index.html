@@ -16,12 +16,12 @@
 
     <meta name="theme-color" content="#B8D6B2" />
 
-    <!-- Icons. favicon.svg is the master; run scripts/build-icons.py to derive
-         the PNGs (iOS home screen, the manifest, crawlers that will not
-         rasterise an SVG) and then uncomment the two lines below. -->
+    <!-- Icons. favicon.svg is the master; the PNGs (iOS home screen, the
+         manifest, crawlers that will not rasterise an SVG) are derived from it
+         by scripts/build-icons.py — rerun that whenever the SVG changes. -->
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <!-- <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png" /> -->
-    <!-- <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png" /> -->
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png" />
     <link rel="manifest" href="./site.webmanifest" />
 
     <!-- Fonts — self-hosted, see public/fonts/ and the @font-face blocks in

@@ -31,12 +31,13 @@ There is no test suite, no linter and no typechecker. `npm run build` is the onl
 build rather than appearing in the browser. The same-shape check on the two dictionaries rides on that:
 see "Two languages".
 
-Three optional Python helpers, none wired into the build:
+Three optional Python helpers, none wired into the build — run by hand, and their output committed.
+`pip3` is absent on this machine; `uv run --with …` supplies the dependencies:
 
 ```bash
-pip install cairosvg Pillow && python3 scripts/build-icons.py   # PNG icons from public/favicon.svg
-pip install fonttools brotli && python3 scripts/trim-fonts.py   # narrow the fonts' weight axes in place
-python3 marketing/social/build.py                               # social-media posters; see "Social posters"
+uv run --with cairosvg --with Pillow python3 scripts/build-icons.py   # PNG icons from public/favicon.svg
+uv run --with fonttools --with brotli python3 scripts/trim-fonts.py   # narrow the fonts' weight axes in place
+uv run --with Pillow python3 marketing/social/build.py                # posters + public/og-*.png; see "Social posters"
 ```
 
 ## Stack
@@ -516,10 +517,14 @@ The hreflang set is **reciprocal and self-inclusive** — each page lists both l
 plus `x-default` on the English root — because Google discards a set that does not point back at itself.
 `public/sitemap.xml` repeats the same set per `<url>`. If you add a language, those two have to agree.
 
-Absent on purpose, and each needs its own commit when the thing exists: `og:image` (no artwork yet; a
-missing image is worse than no tag), the raster favicons (run `scripts/build-icons.py`, then uncomment the
-two `<link>` tags and fill the empty `icons` array in `site.webmanifest`), and `aggregateRating`/`Review`
-(self-published reviews are ignored under Google's review-snippet policy at best).
+**Images.** Each page has its own `og:image` — `public/og-en.png` / `og-hr.png`, 1200×630, rendered by
+`marketing/social/build.py` (design `7-og`) — with a `summary_large_image` Twitter card and an alt built from
+the name and `site.tagline`. The raster icons (`favicon-32`, `apple-touch-icon`, `icon-192`, `icon-512`) come
+from `scripts/build-icons.py`; `icon-512.png` doubles as the JSON-LD `logo`. **Regenerate the PNGs whenever
+`favicon.svg`, `Logo.jsx` or the tagline changes** — they are committed files, not build output.
+
+Absent on purpose: `aggregateRating`/`Review` (self-published reviews are ignored under Google's
+review-snippet policy at best).
 
 ### Indexing and Google Search Console
 
@@ -552,6 +557,7 @@ screenshotted to `marketing/social/png/<n>-<design>-<en|hr>.png` at 2x: 2160×27
 | `4-how-it-works` | square | the three steps, shortened by dropping whole sentences |
 | `5-rates` | square | the rate card and the "first call is free" note |
 | `6-name` | 4:5 | large logo and wordmark, tagline, `site.what`, URL and email. The portrait was tried here and dropped as too much |
+| `7-og` | 1200×630 | logo, wordmark, tagline, URL. **Not a poster** — the site's link preview, written to `public/og-<lang>.png` (rendered 2x, downsampled with Pillow) and deployed |
 
 The site owner picked **1, 2, 4 and 6** for use. 3 and 5 still render but were not chosen.
 

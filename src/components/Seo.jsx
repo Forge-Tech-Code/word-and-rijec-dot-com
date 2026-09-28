@@ -21,8 +21,8 @@ export function localeUrl(lang) {
  * in index.html. It is read from src/siteInfo.js, so a domain change is one
  * edit fewer. See CLAUDE.md → Deployment.
  *
- * The JSON-LD still claims only what is actually true — the name, the email,
- * the four services, the two languages. No person, address, price, rating or
+ * The JSON-LD still claims only what is actually true — the name, the logo,
+ * the email, the four services, the two languages. No person, address, price, rating or
  * review. The business is an `Organization`, NOT `LocalBusiness` (or its
  * subtype `ProfessionalService`): Google's local-business result requires a
  * street `address`, and this online-only business has none, so that type
@@ -34,6 +34,11 @@ export function localeUrl(lang) {
 export default function Seo() {
   const { lang, t } = useLang()
   const url = localeUrl(lang)
+  const origin = site.url.replace(/\/$/, '')
+  // Rendered by marketing/social/build.py, one per language. Absolute, because
+  // crawlers resolve og:image without a base. The alt is the image's own text.
+  const ogImage = `${origin}/og-${lang}.png`
+  const ogAlt = `${site.name} — ${t.site.tagline}`
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -51,6 +56,7 @@ export default function Seo() {
         '@id': `${site.url}#business`,
         name: site.name,
         url: site.url,
+        logo: `${origin}/icon-512.png`,
         email: site.email,
         description: t.meta.description,
         knowsLanguage: LANGS.map((l) => localeTag[l]),
@@ -92,9 +98,17 @@ export default function Seo() {
         <meta key={l} property="og:locale:alternate" content={localeOgTag[l]} />
       ))}
 
-      <meta name="twitter:card" content="summary" />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:image:type" content="image/png" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={ogAlt} />
+
+      <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={t.meta.title} />
       <meta name="twitter:description" content={t.meta.ogDescription} />
+      <meta name="twitter:image" content={ogImage} />
+      <meta name="twitter:image:alt" content={ogAlt} />
 
       <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
     </Head>
