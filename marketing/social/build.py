@@ -8,8 +8,7 @@ with headless Firefox into ./png/ at 2x (`zoom:2` on <html>) (so a 1080px post i
 
 Every sentence below is copied verbatim from src/i18n/en.js / hr.js or
 src/sections/Rates.jsx; nothing is written here on the client's behalf. The
-testimonials are deliberately NOT used (they are invented), nor is
-`site.location` (a placeholder). See CLAUDE.md → "What's placeholder".
+testimonials and `site.location` are not used on any poster.
 """
 import pathlib
 import subprocess

@@ -15,7 +15,6 @@ npm run preview  # serve dist/ locally
 
 Deployed to GitHub Pages at **https://word-and-rijec.com/**.
 
-**Not launched yet.** The English copy and rates are the client's; the Croatian copy, the testimonials
-and the contact email are still placeholders, and the page is deliberately `noindex` until real content ships — see CLAUDE.md → SEO before
-changing that. Design tokens, content locations, the DNS setup, and the full list of what is still
-placeholder are documented in [`CLAUDE.md`](./CLAUDE.md).
+**Live and open to search** since 2026-09-28, with the client's own copy in both languages. Design
+tokens, content locations, the DNS and Search Console setup, and the little that is still missing are
+documented in [`CLAUDE.md`](./CLAUDE.md).

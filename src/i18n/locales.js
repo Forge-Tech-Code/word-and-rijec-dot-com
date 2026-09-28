@@ -70,7 +70,7 @@ export function otherLang(lang) {
  * A DOCUMENT-RELATIVE href from one locale's page to another's.
  *
  * The switcher cannot use the root-relative '/hr/' from `localePath`: under
- * the github.io project-pages fallback (xarlos89.github.io/word-and-rijec/)
+ * the github.io project-pages fallback (xarlos89.github.io/word-and-rijec-dot-com/)
  * a leading slash escapes the sub-path and lands on xarlos89.github.io/hr/.
  * Same reason `base` is './' — see CLAUDE.md → Deployment.
  *

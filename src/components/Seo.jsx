@@ -12,7 +12,7 @@ export function localeUrl(lang) {
  * Everything in <head> that differs between the two languages.
  *
  * index.html keeps only the tags that are the same on both pages — charset,
- * viewport, the robots noindex, the icons, the manifest and the font
+ * viewport, the icons, the manifest and the font
  * preloads. The title, the description, the canonical, Open Graph, Twitter
  * and the JSON-LD graph are all per-locale and are rendered from here, so
  * they are not duplicated in the template.
@@ -21,10 +21,15 @@ export function localeUrl(lang) {
  * in index.html. It is read from src/siteInfo.js, so a domain change is one
  * edit fewer. See CLAUDE.md → Deployment.
  *
- * The JSON-LD still claims only what is actually true — the name, the four
- * services, the two languages. No person, address, price, rating or review,
- * because none of it is known. The only thing bilingualism adds is
- * `inLanguage` on each page and the reciprocal hreflang below.
+ * The JSON-LD still claims only what is actually true — the name, the email,
+ * the four services, the two languages. No person, address, price, rating or
+ * review. The business is an `Organization`, NOT `LocalBusiness` (or its
+ * subtype `ProfessionalService`): Google's local-business result requires a
+ * street `address`, and this online-only business has none, so that type
+ * shows up as an invalid item in Search Console. Its `url` is the root on
+ * both pages so the two copies describe one identical entity under one @id.
+ * The only thing bilingualism adds is `inLanguage` and the reciprocal
+ * hreflang below.
  */
 export default function Seo() {
   const { lang, t } = useLang()
@@ -42,13 +47,13 @@ export default function Seo() {
         inLanguage: LANGS.map((l) => localeTag[l]),
       },
       {
-        '@type': ['ProfessionalService', 'LocalBusiness'],
+        '@type': 'Organization',
         '@id': `${site.url}#business`,
         name: site.name,
-        url,
+        url: site.url,
+        email: site.email,
         description: t.meta.description,
         knowsLanguage: LANGS.map((l) => localeTag[l]),
-        availableLanguage: LANGS.map((l) => localeTag[l]),
         hasOfferCatalog: {
           '@type': 'OfferCatalog',
           name: t.services.heading,

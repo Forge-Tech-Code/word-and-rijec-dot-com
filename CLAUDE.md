@@ -11,8 +11,8 @@ The page is built **twice, once per language** — `/` in English and `/hr/` in 
 components and two dictionaries. See "Two languages" below before touching any user-visible string.
 
 **Both pages now carry the client's own copy** (hero, services, about, how it works, rates, FAQ,
-contact) — the English and the Croatian were each written by her. The testimonials are still invented,
-in both languages. See "What's placeholder" at the bottom — read that section before writing any content.
+contact) — the English and the Croatian were each written by her. The site launched to search on
+2026-09-28. See "What's placeholder" at the bottom — read that section before writing any content.
 
 The site is a sibling of `../guy-catz-dot-com` and `../veli-bol-home` and shares their stack and
 conventions; when something here is unclear, those are the reference implementations.
@@ -433,7 +433,8 @@ custom domain attached** — GitHub Pages reads it from each published artifact,
 site to the `github.io` URL on the next deploy.
 
 `vite.config.js` sets **`base: './'`**. At a domain root an absolute `/` base would work equally well, but
-the project-pages URL (`xarlos89.github.io/word-and-rijec/`) stays live as a fallback and an absolute
+the project-pages URL (`xarlos89.github.io/word-and-rijec-dot-com/`) is the fallback — it 301s to the domain
+while `public/CNAME` is in place, and serves the site itself if that is ever removed — and an absolute
 `/asset` path 404s under that sub-path. The relative base means one build serves both — don't "tidy" it to
 `/`. Everything emitted is document-relative to match; see `src/images.js`.
 
@@ -464,7 +465,7 @@ forget — don't type the origin back into the template.
 
 Two more carry the domain as text rather than as a working URL, and need the same edit:
 
-- `public/robots.txt` → the commented-out `Sitemap:` line, which becomes live at launch (see SEO)
+- `public/robots.txt` → the `Sitemap:` line
 - `contact.form.subject` in **both** dictionaries → the subject line of every enquiry email
 
 `grep -rn "word-and-rijec" --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=html .` finds the lot
@@ -500,12 +501,15 @@ that is almost always a registrar that wrote them against a subdomain instead of
 
 **`src/components/Seo.jsx` carries everything that differs between the two pages**: the title, the
 description, the canonical, the hreflang set, Open Graph, the Twitter card and a small JSON-LD graph
-(`WebSite` + `ProfessionalService` with an `OfferCatalog` of the four services). `index.html` keeps only
+(`WebSite` + an `Organization` with an `OfferCatalog` of the four services). `index.html` keeps only
 what is identical on both — charset, viewport, the `robots` tag, the icons, the manifest and the font
 preloads. **Do not put a per-language tag back in the template**: it would be emitted twice on every page.
 
-The JSON-LD deliberately claims **only what is actually true**: the business name, the services, and the
-two languages. No person, address, opening hours, price, rating or review is asserted, because none of it
+The JSON-LD deliberately claims **only what is actually true**: the business name, the email, the services,
+and the two languages. It is an `Organization`, **not `LocalBusiness`** or its subtype `ProfessionalService`:
+Google's local-business result requires a street `address`, which this online business does not have, and
+Search Console reports the item as invalid without one. Its `url` is the root on both pages, so the two
+copies are one entity under one `@id`. No person, address, opening hours, price, rating or review is asserted, because none of it
 is known. Add to it as real details arrive — never to pad it out.
 
 The hreflang set is **reciprocal and self-inclusive** — each page lists both languages *including itself*,
@@ -517,22 +521,20 @@ missing image is worse than no tag), the raster favicons (run `scripts/build-ico
 two `<link>` tags and fill the empty `icons` array in `site.webmanifest`), and `aggregateRating`/`Review`
 (self-published reviews are ignored under Google's review-snippet policy at best).
 
-### The site is noindex, on purpose
+### Indexing and Google Search Console
 
-`index.html` has `<meta name="robots" content="noindex, nofollow">` and `public/robots.txt` is
-`Disallow: /`.
+**The site is open to search since 2026-09-28.** There is no `robots` meta tag, `public/robots.txt` is
+`Allow: /` and names the sitemap. Before that date both were a noindex/Disallow pre-launch switch.
 
-**The domain being live does not change this.** If anything it raises the stakes: the placeholder would now
-be indexed on the real domain rather than a throwaway github.io URL, and the real site would launch on top
-of it. Flipping these two is the *launch* switch, not the *domain* switch.
-
-To launch, in one commit: delete the `robots` meta tag, change `robots.txt` to `Allow: /`, uncomment its
-`Sitemap:` line, and bump **both** `<lastmod>` values in `public/sitemap.xml`. Do it in the same commit
-that ships real copy, not before.
-
-The `robots` tag is in `index.html` rather than `Seo.jsx` on purpose: it applies to both languages, so the
-launch switch stays one edit rather than two. "Real copy" means real copy **in both languages**, and no
-invented testimonials in either.
+- **Search Console is verified as a Domain property by a DNS TXT record** at the registrar. There is no
+  verification tag or file in the repo, and none is needed — but deleting that TXT record loses the
+  property.
+- The sitemap (`https://word-and-rijec.com/sitemap.xml`) is submitted there. **Bump both `<lastmod>`
+  values** in `public/sitemap.xml` whenever the page content changes; Google ignores `changefreq` and
+  `priority`.
+- If a page ever needs hiding again, use a `noindex` meta tag **with robots.txt still allowing crawling**.
+  A `Disallow` stops Google fetching the page, so it never sees the noindex, and a linked URL can still be
+  indexed without its content.
 
 ## Social posters
 
@@ -560,13 +562,11 @@ The site owner picked **1, 2, 4 and 6** for use. 3 and 5 still render but were n
 - **The copy is duplicated, not imported** — it lives in the `T` dict in the script, copied verbatim from
   the dictionaries and `Rates.jsx`. When she changes copy or a price on the site, update `T` and rerun, or
   the posters go stale.
-- **The same content rules apply.** Nothing in `T` may be written on her behalf. The invented testimonials
-  and the placeholder `site.location` are deliberately not used; keep it that way. The Croatian
+- **The same content rules apply.** Nothing in `T` may be written on her behalf. The testimonials and
+  `site.location` are not used on any poster. The Croatian
   `services.sub` is scaffold chrome, so the HR Services poster shows her tagline there instead.
 - **Unconfirmed:** the Croatian `site.what` ("Jezične usluge na engleskom i hrvatskom") on `6-name-hr` has
   not been confirmed as hers; she should check it before it is posted.
-- **The posters point people at the live site**, which still carries the invented testimonials — see below.
-  Advertising drives traffic regardless of `noindex`.
 
 ## What's placeholder
 
@@ -575,12 +575,17 @@ Assume everything is, unless it is in this list of things that are real:
 - The business name, "Word & Riječ", the domain `word-and-rijec.com`, and the two languages.
 - The four services: language lessons, tutoring, editing & proofreading, copywriting — and the English
   titles, audiences and descriptions of each, in that order.
-- **The Croatian copy**, all of it except the testimonials and short UI chrome — supplied by the client in
+- **The Croatian copy**, all of it except short UI chrome — supplied by the client in
   Croatian, not translated from her English.
 - **The English copy** — the hero ("More language. More life." and its two paragraphs, also used as the
   English tagline), About (Rebekah Berković's own text), How it works, the FAQ answers, the rates note and
   the contact paragraph. All supplied by the client.
 - **`site.practitioner`**: Rebekah Berković.
+- **`site.location`** ("Online, worldwide" / "Online, bilo gdje u svijetu"), confirmed 2026-09-28.
+- **Testimonials** (Sarah M., Ivana K., Marko P.), in both languages — confirmed by the site owner on
+  2026-09-28 as genuine quotes from real students. They were first added (commit `a819e47`) marked as
+  invented layout filler; that label was superseded by this confirmation. Any new quote must likewise be
+  a real one, supplied in both languages.
 - **The About portrait** of Rebekah, supplied by the client.
 - **Rates.** The figures in the `prices` map in `Rates.jsx` are hers: tutoring €15/h with 5- and 10-session
   blocks, lessons €30/h with blocks and savings, academic English €40/h, proofreading €30/h, copy quoted
@@ -588,18 +593,11 @@ Assume everything is, unless it is in this list of things that are real:
 - The stack, the design system, the build and the deploy workflow.
 - The **bilingual machinery** — the two routes, the dictionaries, the switcher, the hreflang.
 
-Placeholder, and to be replaced before anything is shown to the public:
+Still missing or provisional:
 
 - **`src/siteInfo.js`** — the email (`rebekahberkovic@gmail.com`) is real. No phone number and no social links; the
   footer and the contact section hide those fields while they are empty, so leaving them blank is safe.
   `site.url` is now real.
-- **"Online, worldwide"** (`site.location`) in each dictionary.
-- **Testimonials.** The three English quotes (Sarah M., Ivana K., Marko P.) were **made up for the layout
-  at the site owner's request** — they are not real students; the Croatian quotes are a translation of those
-  invented ones, also at the site owner's request. Replace them with
-  real quotes, or delete the section from `App.jsx` (and re-pair the
-  dividers around it) rather than launching with invented ones — and delete `testimonials` from *both*
-  dictionaries, or the same-shape assertion will pass while the section is gone and quietly rot.
 - **Photography.** Only the About portrait is real (`public/images/rebekah-berkovic-{400,600,830}.webp`,
   cropped to 4:5 from an 830px-wide original, so there is no 1100 size). Nothing else has a photo.
 - **Logo.** `<Logo>` and `public/favicon.svg` are drawn here, not commissioned. See "The logo" above.
@@ -631,7 +629,7 @@ URL in the same language plus `#contact`. The form also sends `_captcha=false`, 
 
 ### Don't invent
 
-The client has not supplied copy, prices, credentials or testimonials. When filling any of this in, use
+The client has not supplied credentials, a phone number or social links. When filling any of this in, use
 what she actually sends. If a section has no real content to put in it, remove the section rather than
 writing plausible-sounding filler — a page that says less is recoverable, a page that says something untrue
 about her business is not.

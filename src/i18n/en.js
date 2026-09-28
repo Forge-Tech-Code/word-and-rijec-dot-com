@@ -118,9 +118,6 @@ export default {
     ],
   },
 
-  // PLACEHOLDER. These three were written for the layout at the site owner's
-  // request; they are not from real students. Replace them with real quotes
-  // before launch. See CLAUDE.md → "What's placeholder".
   testimonials: {
     heading: 'Testimonials',
     sub: 'In their own words',
