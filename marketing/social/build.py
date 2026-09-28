@@ -3,8 +3,9 @@ Social-media posters for Word & Riječ, themed like the site.
 
 Writes one HTML file per design per language into ./html/, then screenshots each
 with headless Firefox into ./png/ at 2x (`zoom:2` on <html>) (so a 1080px post is a 2160px PNG).
+It also renders the site's own link-preview image, public/og-<lang>.png.
 
-    python3 marketing/social/build.py
+    uv run --with Pillow python3 marketing/social/build.py
 
 Every sentence below is copied verbatim from src/i18n/en.js / hr.js or
 src/sections/Rates.jsx; nothing is written here on the client's behalf. The
@@ -316,6 +317,27 @@ def d6_portrait(t):
     return page(1080, 1350, body, 'mint')
 
 
+# ── 7. Link preview — 1200×630, the og:image for the site itself ──────────────
+# Not a poster: written to public/og-<lang>.png and referenced by Seo.jsx, so
+# it is deployed. Only the wordmark, her tagline and the URL — the Croatian
+# site.what is still unconfirmed (see CLAUDE.md → Social posters), so it is
+# deliberately left off.
+def d7_og(t):
+    body = f'''
+<div style="flex:1;display:flex;align-items:center;justify-content:center;gap:56px;padding:40px 80px 0">
+  {LOGO.replace('class="logo"', 'style="height:230px;width:auto;flex:none"')}
+  <div>
+    <div class="display" style="font-size:116px;line-height:1">Word &amp; Riječ</div>
+    <div class="display" style="font-size:50px;color:{C['soft']};margin-top:26px">{t['tagline']}</div>
+  </div>
+</div>
+{seam('mint', 'haze', 'meadow', 170)}
+<div style="background:{C['haze']};height:84px;display:flex;align-items:center;justify-content:center;padding-bottom:14px">
+  <span style="font-size:32px;font-weight:800;color:{C['ink']}">{URL}</span>
+</div>'''
+    return page(1200, 630, body, 'mint')
+
+
 DESIGNS = [('1-tagline', d1_tagline, (1080, 1350)), ('2-services', d2_services, (1080, 1350)),
            ('3-about', d3_about, (1080, 1350)), ('4-how-it-works', d4_approach, (1080, 1080)),
            ('5-rates', d5_rates, (1080, 1080)), ('6-name', d6_portrait, (1080, 1350))]
@@ -334,6 +356,21 @@ def main():
                             '--screenshot', str(out), f'--window-size={2 * w},{2 * h}', src.as_uri()],
                            check=True, capture_output=True, timeout=120)
             print(out.relative_to(REPO))
+        og(T[lang], lang, prof, html_dir)
+
+
+def og(t, lang, prof, html_dir):
+    """The deployed link-preview image: rendered at 2x like the posters, then
+    downsampled to 1200×630 — the size every platform expects — with Pillow."""
+    from PIL import Image
+    src, big = html_dir / f'7-og-{lang}.html', html_dir / f'7-og-{lang}@2x.png'
+    out = REPO / 'public' / f'og-{lang}.png'
+    src.write_text(d7_og(t))
+    subprocess.run(['firefox', '--headless', '--no-remote', '--profile', str(prof),
+                    '--screenshot', str(big), '--window-size=2400,1260', src.as_uri()],
+                   check=True, capture_output=True, timeout=120)
+    Image.open(big).convert('RGB').resize((1200, 630), Image.LANCZOS).save(out, optimize=True)
+    print(out.relative_to(REPO))
 
 
 if __name__ == '__main__':

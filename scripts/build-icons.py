@@ -6,17 +6,16 @@ The SVG alone covers modern browsers, but three things still want a PNG: iOS
 home-screen icons, the web manifest, and the crawlers that fetch a favicon for
 a search result and do not rasterise SVG.
 
-Nothing references these yet — generate them, then uncomment the two <link>
-tags in index.html and fill in the empty "icons" array in
-public/site.webmanifest.
+index.html links favicon-32 and apple-touch-icon; public/site.webmanifest
+lists icon-192 and icon-512; Seo.jsx uses icon-512 as the JSON-LD logo.
+Rerun this whenever favicon.svg changes, and commit the PNGs.
 
 The favicon's rounded rect leaves transparent corners. iOS composites those
 against black, so every PNG here is flattened onto `mint` (#B8D6B2) — the
 same tone as the icon's own ground, which makes the rounding invisible and
 lets each platform apply its own mask.
 
-    pip install cairosvg Pillow
-    python3 scripts/build-icons.py
+    uv run --with cairosvg --with Pillow python3 scripts/build-icons.py
 """
 from io import BytesIO
 from pathlib import Path
