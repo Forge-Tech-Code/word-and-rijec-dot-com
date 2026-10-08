@@ -48,8 +48,9 @@ T = {
                ('Get started', 'Everything is tailored to you — your needs, your goals and your way of working.')],
         rates='Rates',
         per_hour='/ hour',
+        from_='from', per_card='per standard page',
         rate_items=[('School English or Croatian tutoring', '€15'), ('Language lessons', '€30'),
-                    ('Academic English & writing', '€40'), ('Proofreading & editing', '€30'),
+                    ('Proofreading & editing', 'from €7'),
                     ('Writing & copy', None)],
         quote='Project-based — get in touch for a quote.',
         note='Your first call or meeting is free. It’s simply a chance to talk, see if we click, and figure out what you need.',
@@ -74,8 +75,9 @@ T = {
                ('Krenimo', 'Sve je prilagođeno vama — vašim potrebama, ciljevima i načinu rada.')],
         rates='Cjenik',
         per_hour='/ sat',
+        from_='od', per_card='po kartici',
         rate_items=[('Instrukcije iz engleskog ili hrvatskog', '€15'), ('Satovi engleskog ili hrvatskog', '€30'),
-                    ('Akademski engleski i pisanje', '€40'), ('Uređivanje i lektura', '€30'),
+                    ('Uređivanje i lektura', 'from €7'),
                     ('Pisanje tekstova', None)],
         quote='Po dogovoru — javite se za ponudu.',
         note='Prvi poziv ili susret je besplatan. To je jednostavno prilika da popričamo, vidimo odgovaramo li si i zajedno ustanovimo što vam treba.',
@@ -276,10 +278,18 @@ def d4_approach(t):
 
 
 # ── 5. Rates — 1080×1080, the rate card ─────────────────────────────────────
+def price(t, p):
+    """'€30' is an hourly figure; 'from €7' is the per-standard-page proofreading rate."""
+    small = f'font-family:Nunito;font-size:20px;color:{C["soft"]}'
+    if p.startswith('from '):
+        return f'<span style="{small}">{t["from_"]}</span> {p[5:]} <span style="{small}">{t["per_card"]}</span>'
+    return f'{p} <span style="{small}">{t["per_hour"]}</span>'
+
+
 def d5_rates(t):
     rows = ''.join(f'''<div style="display:flex;justify-content:space-between;align-items:baseline;gap:30px;padding:20px 0;border-bottom:2px solid {C['line']}55">
       <span class="title" style="font-size:31px">{name}</span>
-      {f'<span class="num" style="font-size:44px;white-space:nowrap">{p} <span style="font-family:Nunito;font-size:20px;color:{C["soft"]}">{t["per_hour"]}</span></span>' if p else f'<span style="font-size:20px;color:{C["soft"]};text-align:right;max-width:330px">{t["quote"]}</span>'}
+      {f'<span class="num" style="font-size:44px;white-space:nowrap">{price(t, p)}</span>' if p else f'<span style="font-size:20px;color:{C["soft"]};text-align:right;max-width:330px">{t["quote"]}</span>'}
     </div>''' for name, p in t['rate_items'])
     body = f'''
 <div style="padding:70px 80px 0;flex:1;display:flex;flex-direction:column">

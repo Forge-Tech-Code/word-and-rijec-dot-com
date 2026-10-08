@@ -21,7 +21,7 @@ export default {
   // src/siteInfo.js.
   site: {
     what: 'English and Croatian language services',
-    location: 'Online, worldwide',
+    location: 'Brač, online, worldwide',
     tagline: 'More language. More life.',
   },
 
@@ -93,7 +93,7 @@ export default {
     body: [
       'I grew up in Croatia speaking English at home with my British mother and Croatian with my father. Being bilingual has always felt natural to me, but it also made me aware from an early age of what language can do — how it can open doors to reading, writing, creativity, connection and new experiences.',
       'For more than 15 years, I’ve taught English and Croatian to all kinds of learners, from complete beginners to advanced speakers. I’ve taught simple one-on-one conversational classes, school and university students, corporate groups and even members of parliament.',
-      'I’ve also been on the other side of the language barrier. I learnt German and Thai from scratch while living in Austria and Thailand, so I know how frustrating it can be to have so much you want to say but not have the words. I also know the wonderful feeling when something finally clicks — when you can have a conversation, understand a joke, read a sign or write something yourself, and suddenly a place feels a little more like home.',
+      'I’ve also been on the other side of the language barrier. I learnt German and Thai from scratch while living in Austria and Thailand, so I know how frustrating it can be to have so much you want to say but not have the words. I also know the wonderful feeling when something finally clicks — when you can have a conversation, understand a joke, read a sign or write something yourself, and suddenly a place feels a little more like home. I currently live and work on Brač.',
       'I believe language learning works best when you actually use the language, in a relaxed environment where you can make mistakes, ask questions and figure things out without feeling judged.',
       'And language isn’t only about speaking. I love working with words on the page, too. Whether it’s a website, essay, application, menu or something more personal, I’m here to help you make sure your words say what you want them to say — and say it well.',
     ],
@@ -148,6 +148,8 @@ export default {
     sub: 'What things cost',
     perHour: '/ hour',
     perSession: '/ session',
+    from: 'from',
+    perCard: 'per standard page',
     save: 'save',
     quote: 'Project-based — get in touch for a quote.',
     note: 'Your first call or meeting is free. It’s simply a chance to talk, see if we click, and figure out what you need.',
@@ -155,13 +157,17 @@ export default {
       single: 'Single session',
       five: '5-session block',
       ten: '10-session block',
+      two: '2 people',
+      threePlus: '3 or more',
     },
     // Rendered in this order. The figures are in src/sections/Rates.jsx,
     // keyed by the same ids.
     items: {
       tutoring: { name: 'School English or Croatian tutoring' },
-      lessons: { name: 'Language lessons' },
-      academic: { name: 'Academic English & writing' },
+      lessons: {
+        name: 'Language lessons',
+        sections: { individual: 'Individual language lessons', group: 'Group lessons' },
+      },
       editing: { name: 'Proofreading & editing' },
       copywriting: { name: 'Writing & copy' },
     },

@@ -22,7 +22,7 @@ export default {
 
   site: {
     what: 'Jezične usluge na engleskom i hrvatskom',
-    location: 'Online, bilo gdje u svijetu',
+    location: 'Brač, online, bilo gdje u svijetu',
     tagline: 'Više jezika. Više života.',
   },
 
@@ -91,7 +91,7 @@ export default {
     photoAlt: 'Rebekah Berković, portret',
     body: [
       'Odrasla sam u Hrvatskoj, pričajući engleski kod kuće s majkom Engleskinjom, a hrvatski s ocem, prijateljima i u školi. Dvojezičnost mi je oduvijek bila potpuno prirodna, ali me istovremeno učinila vrlo svjesnom onoga što jezik može. Jezik mi je otvorio vrata čitanju, pisanju, kreativnosti i na kraju podučavanju.',
-      'Bila sam i s druge strane jezične barijere. Učila sam njemački i tajlandski od nule dok sam živjela u Austriji i Tajlandu, i znam koliko je frustrirajuće imati toliko toga za reći, a ne imati riječi kojima biste to rekli. Ali znam i onaj nevjerojatan osjećaj kada nešto napokon klikne — kada možete s nekim popričati, razumjeti šalu, pročitati znak, sami nešto napisati i odjednom se neko mjesto počne osjećati malo više kao doma.',
+      'Bila sam i s druge strane jezične barijere. Učila sam njemački i tajlandski od nule dok sam živjela u Austriji i Tajlandu, i znam koliko je frustrirajuće imati toliko toga za reći, a ne imati riječi kojima biste to rekli. Ali znam i onaj nevjerojatan osjećaj kada nešto napokon klikne — kada možete s nekim popričati, razumjeti šalu, pročitati znak, sami nešto napisati i odjednom se neko mjesto počne osjećati malo više kao doma. Trenutno živim i radim na Braču.',
       'Znam da učenje jezika može djelovati zastrašujuće. Ne mislim da mora biti. Vjerujem u učenje kroz stvarnu upotrebu jezika, u opuštenom i ugodnom okruženju u kojem možete griješiti, postavljati pitanja i učiti bez straha da ćete biti osuđivani.',
       'A jezik nije samo govor. Volim ono što se događa kada riječi stavimo na papir. Pisanje nam može pomoći da razumijemo što mislimo i osjećamo. Ali naši tekstovi žive i u stvarnom svijetu. Ljudi čitaju naše web stranice, menije, e-mailove, prijave i eseje — i dobro pisanje čini razliku. Tu sam da vam pomognem da vaše riječi kažu ono što želite reći — i da to kažu dobro.',
     ],
@@ -146,6 +146,8 @@ export default {
     sub: 'Koliko što košta',
     perHour: '/ sat',
     perSession: '/ sat',
+    from: 'od',
+    perCard: 'po kartici',
     save: 'ušteda',
     quote: 'Po dogovoru — javite se za ponudu.',
     note: 'Prvi poziv ili susret je besplatan. To je jednostavno prilika da popričamo, vidimo odgovaramo li si i zajedno ustanovimo što vam treba.',
@@ -153,11 +155,15 @@ export default {
       single: 'Pojedinačni sat',
       five: 'Paket od 5 sati',
       ten: 'Paket od 10 sati',
+      two: '2 osobe',
+      threePlus: '3 ili više osoba',
     },
     items: {
       tutoring: { name: 'Instrukcije iz engleskog ili hrvatskog' },
-      lessons: { name: 'Satovi engleskog ili hrvatskog' },
-      academic: { name: 'Akademski engleski i pisanje' },
+      lessons: {
+        name: 'Satovi engleskog ili hrvatskog',
+        sections: { individual: 'Individualni satovi', group: 'Grupni satovi' },
+      },
       editing: { name: 'Uređivanje i lektura' },
       copywriting: { name: 'Pisanje tekstova' },
     },
