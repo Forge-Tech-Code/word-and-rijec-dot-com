@@ -604,7 +604,7 @@ Assume everything is, unless it is in this list of things that are real:
 - The **bilingual machinery** — the two routes, the dictionaries, the switcher, the hreflang.
 
 **Drafted here on 2026-10-08 and awaiting her check** — Croatian she asked for in English only: the About
-sentence "Trenutno živim i radim na Braču." and the rate labels `Individualni satovi`, `Grupni satovi`,
+sentence "Trenutno živim i radim na Braču." (end of the first paragraph, both languages) and the rate labels `Individualni satovi`, `Grupni satovi`,
 `2 osobe`, `3 ili više osoba`, `od … po kartici`. Replace them with her wording when she sends it.
 
 Still missing or provisional:
