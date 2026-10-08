@@ -587,17 +587,25 @@ Assume everything is, unless it is in this list of things that are real:
   English tagline), About (Rebekah Berković's own text), How it works, the FAQ answers, the rates note and
   the contact paragraph. All supplied by the client.
 - **`site.practitioner`**: Rebekah Berković.
-- **`site.location`** ("Online, worldwide" / "Online, bilo gdje u svijetu"), confirmed 2026-09-28.
+- **`site.location`** ("Brač, online, worldwide" / "Brač, online, bilo gdje u svijetu") — "Brač" added at
+  her request on 2026-10-08. It shows in the footer and under the contact form.
 - **Testimonials** (Sarah M., Ivana K., Marko P.), in both languages — confirmed by the site owner on
   2026-09-28 as genuine quotes from real students. They were first added (commit `a819e47`) marked as
   invented layout filler; that label was superseded by this confirmation. Any new quote must likewise be
   a real one, supplied in both languages.
 - **The About portrait** of Rebekah, supplied by the client.
 - **Rates.** The figures in the `prices` map in `Rates.jsx` are hers: tutoring €15/h with 5- and 10-session
-  blocks, lessons €30/h with blocks and savings, academic English €40/h, proofreading €30/h, copy quoted
-  per project. The figures are shared by both languages; the names and package labels are translated.
+  blocks; language lessons in two subsections (`sections` in the map) — individual €30/h with blocks and
+  savings, group €20/h for 2 people and €15/h for 3 or more; proofreading from €7 per standard page
+  (`kartica`); copy quoted per project. "Academic English & writing" was removed at her request on
+  2026-10-08. She did not say whether the group prices are per person, so the page does not either. The
+  figures are shared by both languages; the names and package labels are translated.
 - The stack, the design system, the build and the deploy workflow.
 - The **bilingual machinery** — the two routes, the dictionaries, the switcher, the hreflang.
+
+**Drafted here on 2026-10-08 and awaiting her check** — Croatian she asked for in English only: the About
+sentence "Trenutno živim i radim na Braču." and the rate labels `Individualni satovi`, `Grupni satovi`,
+`2 osobe`, `3 ili više osoba`, `od … po kartici`. Replace them with her wording when she sends it.
 
 Still missing or provisional:
 
