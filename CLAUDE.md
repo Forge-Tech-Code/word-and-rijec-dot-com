@@ -434,7 +434,7 @@ custom domain attached** — GitHub Pages reads it from each published artifact,
 site to the `github.io` URL on the next deploy.
 
 `vite.config.js` sets **`base: './'`**. At a domain root an absolute `/` base would work equally well, but
-the project-pages URL (`xarlos89.github.io/word-and-rijec-dot-com/`) is the fallback — it 301s to the domain
+the project-pages URL (`forge-tech-code.github.io/word-and-rijec-dot-com/`) is the fallback — it 301s to the domain
 while `public/CNAME` is in place, and serves the site itself if that is ever removed — and an absolute
 `/asset` path 404s under that sub-path. The relative base means one build serves both — don't "tidy" it to
 `/`. Everything emitted is document-relative to match; see `src/images.js`.
@@ -487,7 +487,7 @@ AAAA  @   2606:50c0:8000::153
 AAAA  @   2606:50c0:8001::153
 AAAA  @   2606:50c0:8002::153
 AAAA  @   2606:50c0:8003::153
-CNAME www xarlos89.github.io.
+CNAME www forge-tech-code.github.io.
 ```
 
 Then in the repo's **Settings → Pages**: set the custom domain to `word-and-rijec.com` (it should already be
