@@ -40,16 +40,42 @@ uv run --with fonttools --with brotli python3 scripts/trim-fonts.py   # narrow t
 uv run --with Pillow python3 marketing/social/build.py                # posters + public/og-*.png; see "Social posters"
 ```
 
+## Tests
+
+```bash
+npm run build && npm test   # the tests read the BUILT site, so build first
+```
+
+`.github/workflows/ci.yml` runs exactly that on every pull request (and on pushes to `main`), as the
+**Build and test** check — the one to make required for merging. Plain `node --test`, no framework:
+
+| file | what it checks |
+|---|---|
+| `tests/general.test.mjs` | the same on every site: title, description, canonical, robots, `lang`, one `h1`, heading order, alt text, duplicate ids, dead `#links`, every local file the HTML or CSS references exists, JSON-LD parses and its `@id`s resolve, Open Graph, `noopener`, robots.txt, sitemap, CNAME, 404 |
+| `tests/browser.test.mjs` | headless Chromium: the page hydrates with no console errors or failed requests, and never scrolls sideways at 320 / 390 / 768 / 1280px |
+| `tests/page.test.mjs` | this site's own rules, most of them from this file — see the test names |
+| `tests/site.config.mjs` | the only per-site input to the two shared files: origin, pages, languages |
+| `tests/lib.mjs` | helpers: load a built page as a DOM (`linkedom`), read JSON-LD, serve `dist/` |
+
+The browser tests block every request to another origin, so they never depend on the network. Locally,
+`CHROMIUM_PATH=/path/to/chromium npm test` uses an existing Chromium instead of `npx playwright install
+chromium`.
+
+**When a test fails, fix the page, not the test** — unless the rule itself changed, in which case change
+the test and this file in the same commit.
+
+Writing them moved the FAQ answers into the HTML for good: they are hidden while closed rather than not rendered, so the prerendered page carries every answer.
+
 ## Stack
 
-- **React 18**, function components only, no state management beyond `useState` in one FAQ accordion.
-- **Vite 5** with `base: './'`. See Deployment — the relative base is load-bearing.
+- **React 19**, function components only, no state management beyond `useState` in one FAQ accordion.
+- **Vite 8** with `base: './'`. See Deployment — the relative base is load-bearing.
 - **vite-react-ssg** (the routes entry, **not** `/single-page` any more) prerenders `App` once per language
   to `dist/index.html` and `dist/hr/index.html`. `src/main.jsx` exports `createRoot`; there is no
   `ReactDOM.render` call anywhere.
 - **Tailwind 3**, configured in `tailwind.config.js`, with a handful of component classes in
-  `src/index.css`. No CSS modules, no styled-components, no Tailwind plugins.
-- **react-router-dom**, but only as a build-time list. `src/routes.jsx` gives vite-react-ssg the two paths
+  `src/index.css`. No CSS modules, no styled-components, no Tailwind plugins. Held on 3.4 on purpose: v4 drops Safari before 16.4, and a trial upgrade (2026-10-18) changed line heights and wrapping, so it is a design task, not a version bump. `npm audit` flags Tailwind 3's build-time file-watching dependencies (braces/micromatch, postcss-selector-parser); they only ever see this repo's own files and never ship to the browser, and the only fix is v4.
+- **react-router-dom 6**, but only as a build-time list. It stays on 6 because `vite-react-ssg` (0.9.2, the latest) only accepts `^6.14`; check its peer range before moving to 7. `src/routes.jsx` gives vite-react-ssg the two paths
   to walk; nothing navigates through it at runtime. Every in-page link is a fragment and the language
   switcher is a plain `<a>` that loads the other document. Do not add client-side navigation on top of it
   without re-reading "Two languages".
@@ -426,6 +452,7 @@ else.
 
 Push to `main` → `.github/workflows/deploy.yml` runs `npm ci && npm run build` and publishes `dist/` to
 GitHub Pages. The workflow sets `enablement: true`, so it turns Pages on rather than failing if it is off.
+Both workflows take Node from `.nvmrc` (26, the newest line; `engines` in `package.json` says the same).
 
 The site is served at **https://word-and-rijec.com/**.
 
