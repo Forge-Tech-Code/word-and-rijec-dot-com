@@ -510,8 +510,8 @@ The JSON-LD deliberately claims **only what is actually true**: the business nam
 and the two languages. It is an `Organization`, **not `LocalBusiness`** or its subtype `ProfessionalService`:
 Google's local-business result requires a street `address`, which this online business does not have, and
 Search Console reports the item as invalid without one. Its `url` is the root on both pages, so the two
-copies are one entity under one `@id`. No person, address, opening hours, price, rating or review is asserted, because none of it
-is known. Add to it as real details arrive — never to pad it out.
+copies are one entity under one `@id`. The one person is the founder, Rebekah, by name and portrait — both supplied by her. No address,
+opening hours, price, rating or review is asserted, because none of it is known. Add to it as real details arrive — never to pad it out.
 
 The hreflang set is **reciprocal and self-inclusive** — each page lists both languages *including itself*,
 plus `x-default` on the English root — because Google discards a set that does not point back at itself.

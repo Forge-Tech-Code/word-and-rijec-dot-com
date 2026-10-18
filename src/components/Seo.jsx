@@ -60,6 +60,11 @@ export default function Seo() {
         email: site.email,
         description: t.meta.description,
         knowsLanguage: LANGS.map((l) => localeTag[l]),
+        founder: {
+          '@type': 'Person',
+          name: site.practitioner,
+          image: `${origin}/images/rebekah-berkovic-830.webp`,
+        },
         hasOfferCatalog: {
           '@type': 'OfferCatalog',
           name: t.services.heading,
