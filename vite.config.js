@@ -34,6 +34,11 @@ export default defineConfig({
      * assetPrefix() in src/i18n/locales.js. See CLAUDE.md → Deployment.
      */
     onPageRendered(route, html) {
+      // The <Head> tags are injected at the top of <head>, ahead of the
+      // template's <meta charset>, pushing it past the first 1024 bytes the
+      // HTML spec (and Lighthouse) require it in. Move it back to the top.
+      html = html.replace(/\s*<meta charset="UTF-8">/i, '')
+        .replace(/<head>/i, '<head><meta charset="UTF-8">')
       const depth = route.split('/').filter(Boolean).length
       if (depth === 0) return html
       const prefix = '../'.repeat(depth)
