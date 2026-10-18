@@ -68,14 +68,14 @@ Writing them moved the FAQ answers into the HTML for good: they are hidden while
 
 ## Stack
 
-- **React 18**, function components only, no state management beyond `useState` in one FAQ accordion.
-- **Vite 5** with `base: './'`. See Deployment — the relative base is load-bearing.
+- **React 19**, function components only, no state management beyond `useState` in one FAQ accordion.
+- **Vite 8** with `base: './'`. See Deployment — the relative base is load-bearing.
 - **vite-react-ssg** (the routes entry, **not** `/single-page` any more) prerenders `App` once per language
   to `dist/index.html` and `dist/hr/index.html`. `src/main.jsx` exports `createRoot`; there is no
   `ReactDOM.render` call anywhere.
 - **Tailwind 3**, configured in `tailwind.config.js`, with a handful of component classes in
   `src/index.css`. No CSS modules, no styled-components, no Tailwind plugins.
-- **react-router-dom**, but only as a build-time list. `src/routes.jsx` gives vite-react-ssg the two paths
+- **react-router-dom 6**, but only as a build-time list. It stays on 6 because `vite-react-ssg` (0.9.2, the latest) only accepts `^6.14`; check its peer range before moving to 7. `src/routes.jsx` gives vite-react-ssg the two paths
   to walk; nothing navigates through it at runtime. Every in-page link is a fragment and the language
   switcher is a plain `<a>` that loads the other document. Do not add client-side navigation on top of it
   without re-reading "Two languages".
@@ -452,6 +452,7 @@ else.
 
 Push to `main` → `.github/workflows/deploy.yml` runs `npm ci && npm run build` and publishes `dist/` to
 GitHub Pages. The workflow sets `enablement: true`, so it turns Pages on rather than failing if it is off.
+Both workflows take Node from `.nvmrc` (26, the newest line; `engines` in `package.json` says the same).
 
 The site is served at **https://word-and-rijec.com/**.
 

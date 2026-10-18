@@ -160,7 +160,7 @@ describe('page: Word & Riječ', () => {
 
   test('W16 the Croatian letters have their font: latin-ext is declared and preloaded', () => {
     const css = cssFiles().map((f) => readFileSync(f, 'utf8')).join('')
-    const ext = [...css.matchAll(/@font-face\{[^}]*\}/g)].map((m) => m[0]).filter((f) => /U\+0100-02BA/i.test(f))
+    const ext = [...css.matchAll(/@font-face\{[^}]*\}/g)].map((m) => m[0]).filter((f) => /U\+0?100-0?2BA/i.test(f)) // Vite's minifier may drop the leading zeros
     assert.ok(ext.length >= 2, 'no latin-ext @font-face blocks — č ć š ž đ would fall back')
     for (const f of ext) {
       const src = f.match(/url\(([^)]+)\)/)[1].replace(/['"]/g, '')
