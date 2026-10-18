@@ -74,7 +74,7 @@ Writing them moved the FAQ answers into the HTML for good: they are hidden while
   to `dist/index.html` and `dist/hr/index.html`. `src/main.jsx` exports `createRoot`; there is no
   `ReactDOM.render` call anywhere.
 - **Tailwind 3**, configured in `tailwind.config.js`, with a handful of component classes in
-  `src/index.css`. No CSS modules, no styled-components, no Tailwind plugins.
+  `src/index.css`. No CSS modules, no styled-components, no Tailwind plugins. Held on 3.4 on purpose: v4 drops Safari before 16.4, and a trial upgrade (2026-10-18) changed line heights and wrapping, so it is a design task, not a version bump. `npm audit` flags Tailwind 3's build-time file-watching dependencies (braces/micromatch, postcss-selector-parser); they only ever see this repo's own files and never ship to the browser, and the only fix is v4.
 - **react-router-dom 6**, but only as a build-time list. It stays on 6 because `vite-react-ssg` (0.9.2, the latest) only accepts `^6.14`; check its peer range before moving to 7. `src/routes.jsx` gives vite-react-ssg the two paths
   to walk; nothing navigates through it at runtime. Every in-page link is a fragment and the language
   switcher is a plain `<a>` that loads the other document. Do not add client-side navigation on top of it
