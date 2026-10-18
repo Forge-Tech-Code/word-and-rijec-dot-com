@@ -4,7 +4,7 @@ import { useLang } from '../i18n'
 
 // Questions and answers both live in src/i18n/.
 
-function FAQItem({ q, a }) {
+function FAQItem({ q, a, id }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -12,6 +12,7 @@ function FAQItem({ q, a }) {
       <button
         onClick={() => setOpen(!open)}
         aria-expanded={open}
+        aria-controls={id}
         className="w-full flex items-center justify-between gap-6 py-6 text-left group"
       >
         <span className="font-title text-lg sm:text-xl text-ink leading-snug group-hover:text-pine transition-colors duration-300">
@@ -28,9 +29,11 @@ function FAQItem({ q, a }) {
           </svg>
         </span>
       </button>
-      {open && (
-        <p className="font-sans text-[15px] text-ink-soft leading-[1.85] pb-7 pr-12 -mt-1 max-w-2xl">{a}</p>
-      )}
+      {/* Always in the HTML, only hidden while closed, so the prerendered
+          page carries every answer for crawlers to read. */}
+      <p id={id} hidden={!open} className="font-sans text-[15px] text-ink-soft leading-[1.85] pb-7 pr-12 -mt-1 max-w-2xl">
+        {a}
+      </p>
     </div>
   )
 }
@@ -49,8 +52,8 @@ export default function FAQ() {
 
           <Reveal delay={110}>
             <div>
-              {t.faq.items.map(({ q, a }) => (
-                <FAQItem key={q} q={q} a={a} />
+              {t.faq.items.map(({ q, a }, i) => (
+                <FAQItem key={q} q={q} a={a} id={`faq-answer-${i}`} />
               ))}
             </div>
           </Reveal>

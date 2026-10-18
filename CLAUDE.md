@@ -40,6 +40,32 @@ uv run --with fonttools --with brotli python3 scripts/trim-fonts.py   # narrow t
 uv run --with Pillow python3 marketing/social/build.py                # posters + public/og-*.png; see "Social posters"
 ```
 
+## Tests
+
+```bash
+npm run build && npm test   # the tests read the BUILT site, so build first
+```
+
+`.github/workflows/ci.yml` runs exactly that on every pull request (and on pushes to `main`), as the
+**Build and test** check — the one to make required for merging. Plain `node --test`, no framework:
+
+| file | what it checks |
+|---|---|
+| `tests/general.test.mjs` | the same on every site: title, description, canonical, robots, `lang`, one `h1`, heading order, alt text, duplicate ids, dead `#links`, every local file the HTML or CSS references exists, JSON-LD parses and its `@id`s resolve, Open Graph, `noopener`, robots.txt, sitemap, CNAME, 404 |
+| `tests/browser.test.mjs` | headless Chromium: the page hydrates with no console errors or failed requests, and never scrolls sideways at 320 / 390 / 768 / 1280px |
+| `tests/page.test.mjs` | this site's own rules, most of them from this file — see the test names |
+| `tests/site.config.mjs` | the only per-site input to the two shared files: origin, pages, languages |
+| `tests/lib.mjs` | helpers: load a built page as a DOM (`linkedom`), read JSON-LD, serve `dist/` |
+
+The browser tests block every request to another origin, so they never depend on the network. Locally,
+`CHROMIUM_PATH=/path/to/chromium npm test` uses an existing Chromium instead of `npx playwright install
+chromium`.
+
+**When a test fails, fix the page, not the test** — unless the rule itself changed, in which case change
+the test and this file in the same commit.
+
+Writing them moved the FAQ answers into the HTML for good: they are hidden while closed rather than not rendered, so the prerendered page carries every answer.
+
 ## Stack
 
 - **React 18**, function components only, no state management beyond `useState` in one FAQ accordion.
